@@ -1,5 +1,7 @@
 # Ramrod
 
+[![Build Status](https://secure.travis-ci.org/wookiehangover/node-ramrod.png?branch=master)](http://travis-ci.org/wookiehangover/node-ramrod)
+
 An extremely minimal router. Seriously, its pretty much just an
 EventEmitter (but that's a good thing.) Its the router you'd write if
 you were writing a router.
