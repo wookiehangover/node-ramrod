@@ -51,14 +51,14 @@ Ramrod.prototype._routeToRegExp = function(route) {
   route = route.replace(escapeRegExp, '\\$&')
                .replace(namedParam, '([^\/]+)')
                .replace(splatParam, '(.*?)');
-  return new RegExp('^' + route + '$');
+  return new RegExp('^\/' + route + '$');
 };
 
 Ramrod.prototype.dispatch = function( req, res ){
   var params;
 
   for(var path in this.routes){
-    if( (params = this.routes[path].exec( req.url.substr(1) )) ){
+    if( (params = this.routes[path].exec( req.url )) ){
       return this.emit.apply(this, [path, req, res].concat( params.slice(1) ));
     }
   }

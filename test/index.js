@@ -20,7 +20,7 @@ describe('Router', function(){
 
     it('lets you make custom regex routes w/o an fn handler', function( done ){
       var router = ramrod({
-        'foo': /^foo|bar/
+        'foo': /^\/foo|bar$/
       });
 
       assert.ok( router.routes.foo );
@@ -71,6 +71,11 @@ describe('Router', function(){
     it('even lets you use anonymouse regex routes (like an idiot)', function(){
       this.router.add(/foo/);
       assert.ok(this.router.routes['/foo/']);
+    });
+
+    it('matches empty routes to /', function( done ){
+      this.router.add('', function(){ done(); });
+      this.router.emit('');
     });
   });
 
