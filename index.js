@@ -54,8 +54,12 @@ Ramrod.prototype._routeToRegExp = function(route) {
   return new RegExp('^\/' + route + '$');
 };
 
+function next(){}
+
 Ramrod.prototype.dispatch = function( req, res ){
   var params;
+
+  this.emit('before', req, res, next);
 
   for(var path in this.routes){
     if( (params = this.routes[path].exec( req.url )) ){
@@ -63,7 +67,7 @@ Ramrod.prototype.dispatch = function( req, res ){
     }
   }
 
-  this.emit('*', req, res);
+  this.emit('*', req, res, next);
 };
 
 module.exports = function( routes ){

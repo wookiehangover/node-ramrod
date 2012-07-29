@@ -93,12 +93,29 @@ describe('Router', function(){
 
     });
 
+    it('should fire a `before` event', function( done ){
+      this.router.on('before', function(){
+        done();
+      });
+
+      this.router.dispatch();
+    });
+
     it('should fire * when no route matches', function( done ){
       this.router.on('*', function(){
         done();
       });
 
       this.router.dispatch({ url: '/foo' });
+    });
+
+    it('should mock a next() method for middleware compatability', function( done ){
+      this.router.on('before', function(req, res, next){
+        next();
+        done();
+      });
+
+      this.router.dispatch();
     });
 
     it('should pass req and res to the handler', function( done ){
