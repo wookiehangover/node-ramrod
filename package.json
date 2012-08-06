@@ -19,5 +19,8 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/wookiehangover/node-ramrod.git"
-  }
+  },
+  "keywords": [
+    "router", "routing", "routes"
+  ]
 }
