@@ -1,5 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
+var parseUrl = require('url').parse;
+var parseQuerystring = require('querystring').parse;
 
 var namedParam    = /:\w+/g;
 var splatParam    = /\*\w+/g;
@@ -58,12 +60,23 @@ function next(){}
 
 Ramrod.prototype.dispatch = function( req, res ){
   var params;
+  var url = parseUrl(req.url);
 
   this.emit('before', req, res, next);
 
   for(var path in this.routes){
-    if( (params = this.routes[path].exec( req.url )) ){
-      return this.emit.apply(this, [path, req, res].concat( params.slice(1) ));
+    if( (params = this.routes[path].exec( url.pathname )) ){
+      var args = [ path, req, res ];
+
+      if( params.length >= 1 ){
+        args = args.concat( params.slice(1) );
+      }
+
+      if( url.query ){
+        args.push( parseQuerystring( url.query ) );
+      }
+
+      return this.emit.apply(this, args );
     }
   }
 
