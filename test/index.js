@@ -98,7 +98,7 @@ describe('Router', function(){
         done();
       });
 
-      this.router.dispatch();
+      this.router.dispatch({ url: '' });
     });
 
     it('should fire * when no route matches', function( done ){
@@ -115,7 +115,7 @@ describe('Router', function(){
         done();
       });
 
-      this.router.dispatch();
+      this.router.dispatch({ url: '' });
     });
 
     it('should pass req and res to the handler', function( done ){
