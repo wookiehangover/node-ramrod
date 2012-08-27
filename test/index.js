@@ -36,6 +36,14 @@ describe('Router', function(){
       router.dispatch({ url: '/foo'});
       router.dispatch({ url: '/bar'});
     });
+
+    it('if route value is not regex or function, this.add(key)', function () {
+      var router = ramrod({
+        'foo/:bar': null
+      });
+
+      assert.ok( router.routes['foo/:bar'] );
+    });
   });
 
   describe('add', function(){
