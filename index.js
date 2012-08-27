@@ -16,10 +16,12 @@ function Ramrod( routes ){
 
         if( util.isRegExp( routes[path] ) ){
           this.routes[path] = routes[path];
-        }
 
-        if( typeof routes[path] == "function" ){
+        } else if( typeof routes[path] == "function" ){
           this.add( path, routes[path] );
+
+        } else {
+          this.add( path );
         }
 
       }
