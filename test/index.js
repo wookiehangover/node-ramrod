@@ -145,6 +145,15 @@ describe('Router', function(){
 
       this.router.dispatch({ url: '/foo/hotdog/cats' }, null);
     });
+
+    it('should pass the url\'s querystring to the route handler', function(done){
+      this.router.add('foo/bar', function( req, res, qs ){
+        assert.equal( 'baz', qs.biz );
+        done();
+      });
+
+      this.router.dispatch({ url: '/foo/bar?biz=baz' }, null);
+    });
   });
 
 });
