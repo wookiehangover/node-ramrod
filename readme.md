@@ -1,6 +1,7 @@
 # Ramrod
 
-[![Build Status](https://secure.travis-ci.org/wookiehangover/node-ramrod.png?branch=master)](http://travis-ci.org/wookiehangover/node-ramrod)
+[![Build
+Status](https://secure.travis-ci.org/wookiehangover/node-ramrod.png?branch=master)](http://travis-ci.org/wookiehangover/node-ramrod) v0.0.5
 
 An extremely minimal router. Seriously, it's pretty much just an
 EventEmitter (but that's a good thing.) It's the router you'd write if
@@ -12,11 +13,16 @@ Add to your project with `npm install ramrod --add` and include it in
 your node app. It's meant to be used with the `http` module. Here's what
 it looks like in action:
 
-    var http
+    var http = require('http');
     var ramrod = require('ramrod');
     var router = ramrod();
 
     router.add('my/:route', function(req, res, param ){
+      res.writeHead(200);
+      res.end('Hello '+ param +'\n');
+    });
+
+    router.add('foo/:bar', function(req, res, param, querystring ){
       res.writeHead(200);
       res.end('Hello '+ param +'\n');
     });
@@ -30,7 +36,6 @@ it looks like in action:
       router.dispatch(req, res);
     }).listen(3000);
 
-
 ### ramrod([routes])
 
 Returns a Ramrod instance and takes an optional routes object as it's
@@ -39,15 +44,17 @@ only argument.
 The routes object takes the form:
 
     {
-      'route/:param1/:param2': function( req, res, p1, p2){
+      'route/:param1/:param2': function( req, res, p1, p2 ){
         // route handler
       },
 
-      'namedRegExpRoute': /^custom\/(reg|ex)/
+      'namedRegExpRoute': /^custom\/(reg|ex)/,
+
+      'route/:param': null
     }
 
-Routes can be processed as either route/handler pairs or as named
-Regular Expression routes.
+Routes can be processed as route/handler pairs, named
+Regular Expression routes, or a route directive with a null value.
 
 ### ramrod.add(route, [name], [callback])
 
@@ -75,5 +82,6 @@ Callbacks recieve all the same arguments as when attached with `add`.
 ### ramrod.dipatch(request, response)
 
 Processes a request and a response object, emitting the first matched
-route from the `ramrod.routes` object. If no matching routes are found,
+route from the `ramrod.routes` object. A `before` event is emitted prior
+to matching against the route table. If no matching routes are found,
 the '\*' event is emitted.
