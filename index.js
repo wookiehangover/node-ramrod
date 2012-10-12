@@ -6,6 +6,7 @@ var parseQuerystring = require('querystring').parse;
 var namedParam    = /:\w+/g;
 var splatParam    = /\*\w+/g;
 var escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g;
+var namespaced    = /^[\w\/:]+\.(\w+)$/;
 
 function Ramrod( routes ){
   this.routes = {};
@@ -35,21 +36,37 @@ Ramrod.prototype.add = function( route, name, callback ){
   if( !callback && typeof name == "function") {
     callback = name;
   }
-
   if( !name || typeof name == "function" ) {
     name = route;
   }
-
   if( !util.isRegExp(route) ){
     route = this._routeToRegExp( route );
   }
-
   if( callback ){
     this.on(name, callback);
   }
-
   this.routes[name] = route;
 };
+
+['get','post','put','del'].forEach(function(method){
+  var methodName = method === 'del' ? 'delete': method;
+
+  Ramrod.prototype[method] = function( route, name, callback ){
+    if( !callback && typeof name == "function") {
+      callback = name;
+    }
+    if( !name || typeof name == "function" ) {
+      name = route;
+    }
+    if( !util.isRegExp(route) ){
+      route = this._routeToRegExp( route );
+    }
+    if( callback ){
+      this.on( name +'.'+ methodName, callback);
+    }
+    this.routes[name +'.'+ methodName] = route;
+  };
+});
 
 Ramrod.prototype._routeToRegExp = function(route) {
   route = route.replace(escapeRegExp, '\\$&')
@@ -61,8 +78,9 @@ Ramrod.prototype._routeToRegExp = function(route) {
 function next(){}
 
 Ramrod.prototype.dispatch = function( req, res ){
-  var params;
+  var params, routeMethod;
   var url = parseUrl(req.url);
+  var method = req.method && req.method.toLowerCase();
 
   this.emit('before', req, res, next);
 
@@ -78,7 +96,16 @@ Ramrod.prototype.dispatch = function( req, res ){
         args.push( parseQuerystring( url.query ) );
       }
 
-      return this.emit.apply(this, args );
+      routeMethod = namespaced.exec(path);
+
+      if( routeMethod && routeMethod[1] ){
+        if( routeMethod[1] === method ){
+          return this.emit.apply(this, args);
+        }
+      } else {
+        return this.emit.apply(this, args );
+      }
+
     }
   }
 

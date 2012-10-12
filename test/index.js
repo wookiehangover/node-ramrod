@@ -1,6 +1,8 @@
 /*global describe, it, after, before, beforeEach*/
 var ramrod = require('../index');
 var assert = require('assert');
+var request = require('request');
+var http = require('http');
 
 describe('Router', function(){
 
@@ -154,6 +156,65 @@ describe('Router', function(){
 
       this.router.dispatch({ url: '/foo/bar?biz=baz' }, null);
     });
+  });
+
+});
+
+describe('Integration', function(){
+  var router = ramrod();
+
+  var server = http.createServer(function(req, res){
+    router.dispatch(req,res);
+  });
+
+  before(function(done){
+    server.listen(9999, done);
+  });
+
+  after(function(done){
+    server.close(done);
+  });
+
+  router.on('*', function(req, res){
+    res.writeHead(404);
+    res.end('Not Found');
+  });
+
+  it('should 404', function(done){
+    request.get('http://localhost:9999/afdahfjdsk', function(err, res, body){
+      assert.equal(res.statusCode, 404);
+      assert.equal(body, 'Not Found');
+      done();
+    });
+  });
+
+  ['get','post','put','del'].forEach(function(method){
+    router[method]('foo/bar/baz', function(req, res){
+      res.writeHead(200);
+      res.end(method);
+    });
+
+    router[method]('foo/bar/:biz', function(req, res, biz){
+      res.writeHead(418);
+      res.end(biz + method);
+    });
+
+    it('router#'+ method, function(done){
+      request[method]('http://localhost:9999/foo/bar/baz', function(err, res, body){
+        assert.equal(res.statusCode, 200);
+        assert.equal(body, method);
+        done();
+      });
+    });
+
+    it('router#'+ method, function(done){
+      request[method]('http://localhost:9999/foo/bar/some', function(err, res, body){
+        assert.equal(res.statusCode, 418);
+        assert.equal(body, 'some'+ method);
+        done();
+      });
+    });
+
   });
 
 });
