@@ -171,8 +171,8 @@ describe('Integration', function(){
     server.listen(9999, done);
   });
 
-  after(function(done){
-    server.close(done);
+  after(function(){
+    server.close();
   });
 
   router.on('*', function(req, res){
