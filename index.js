@@ -6,7 +6,7 @@ var parseQuerystring = require('querystring').parse;
 var namedParam    = /:\w+/g;
 var splatParam    = /\*\w+/g;
 var escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g;
-var namespaced    = /^[\w\/:]+\.(\w+)$/;
+var namespaced    = /^[\w\/:]+\|(\w+)$/;
 
 function Ramrod( routes ){
   this.routes = {};
@@ -62,9 +62,9 @@ Ramrod.prototype.add = function( route, name, callback ){
       route = this._routeToRegExp( route );
     }
     if( callback ){
-      this.on( name +'.'+ methodName, callback);
+      this.on( name +'|'+ methodName, callback);
     }
-    this.routes[name +'.'+ methodName] = route;
+    this.routes[name +'|'+ methodName] = route;
   };
 });
 
