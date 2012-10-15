@@ -48,7 +48,7 @@ Ramrod.prototype.add = function( route, name, callback ){
   this.routes[name] = route;
 };
 
-['get','post','put','del'].forEach(function(method){
+['get','post','put','del','options'].forEach(function(method){
   var methodName = method === 'del' ? 'delete': method;
 
   Ramrod.prototype[method] = function( route, name, callback ){
