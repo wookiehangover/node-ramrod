@@ -2,7 +2,7 @@
 
 [![Build
 Status](https://secure.travis-ci.org/wookiehangover/node-ramrod.png?branch=master)](http://travis-ci.org/wookiehangover/node-ramrod)
-v0.0.7
+v0.0.8
 
 An extremely minimal router. Seriously, it's pretty much just an
 EventEmitter (but that's a good thing.) It's the router you'd write if
@@ -39,7 +39,7 @@ it looks like in action:
 
 ### ramrod([routes])
 
-Returns a Ramrod instance and takes an optional routes object as it's
+Returns a Ramrod instance and takes an optional routes object as its
 only argument.
 
 The routes object takes the form:
@@ -96,7 +96,7 @@ Adds a route handler that will only be triggered when `req.method === DELETE`
 
 Callbacks recieve all the same arguments as when attached with `add`.
 
-### ramrod.dipatch(request, response)
+### ramrod.dispatch(request, response)
 
 Processes a request and a response object, emitting the first matched
 route from the `ramrod.routes` object. A `before` event is emitted prior
