@@ -217,5 +217,27 @@ describe('Integration', function(){
 
   });
 
+  // RFC1738 defines the following characters as valid unencoded characters in a url.
+  // http://www.faqs.org/rfcs/rfc1738.html
+  '$-_.+!*(),'.split('').forEach(function(character){
+    router.post('path/with/char'+character, function(req, res){
+      res.writeHead(405);
+      res.end('Not Allowed');
+    });
+
+    router.get('path/with/char'+character, function(req, res){
+      res.writeHead(200);
+      res.end('char'+character);
+    });
+
+    it('router#'+character, function(done){
+      request.get('http://localhost:9999/path/with/char'+character, function(err, res, body){
+        assert.equal(res.statusCode, 200);
+        assert.equal(body, 'char'+character);
+        done();
+      });
+    });
+  });
+
 });
 
