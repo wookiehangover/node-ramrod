@@ -1,6 +1,6 @@
 {
   "name": "ramrod",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "the router you'd write if you were writing a router",
   "main": "index.js",
   "scripts": {
