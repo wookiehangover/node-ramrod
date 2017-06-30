@@ -5,8 +5,8 @@ var parseQuerystring = require('querystring').parse
 
 var namedParam = /:\w+/g
 var splatParam = /\*\w+/g
-var escapeRegExp = /[-[\]{}()+?.,\\^$|#\s]/g
-var namespaced = /^[\w\/:]+\|(\w+)$/
+var escapeRegExp = /[-[\]{}()+?.,\\^$|#\s*]/g
+var namespaced = /^[\w\/:$\-_.+!*(),]+\|(\w+)$/
 
 function Ramrod (routes) {
   this.routes = {}
