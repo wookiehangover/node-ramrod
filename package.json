@@ -4,7 +4,8 @@
   "description": "the router you'd write if you were writing a router",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "standard index.js"
   },
   "license": "BSD",
   "devDependencies": {
