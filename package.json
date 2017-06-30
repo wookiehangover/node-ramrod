@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "lint": "standard index.js"
+    "lint": "standard --fix index.js"
   },
   "license": "BSD-2-Clause",
   "devDependencies": {
@@ -16,7 +16,7 @@
   "dependencies": {},
   "optionalDependencies": {},
   "engines": {
-    "node": "*"
+    "node": ">6"
   },
   "author": "wookiehangover <sam@quickleft.com> (http://wookiehangover.com)",
   "repository": {
